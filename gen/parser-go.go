@@ -978,7 +978,11 @@ func (p *ParserGo) visitNodeComponentElement(state *parseGoState, n *html.Node) 
 
 	// now that we have vgcomp with the right type and a correct value, we can declare the vg-var if specified
 	if vgv := vgVarExpr(n); vgv != "" {
-		fmt.Fprintf(&state.buildBuf, "var %s = vgcomp // vg-var\n", vgv)
+		if strings.HasPrefix(vgv, "c.") {
+			fmt.Fprintf(&state.buildBuf, "%s = vgcomp // vg-var\n", vgv)
+		} else {
+			fmt.Fprintf(&state.buildBuf, "var %s = vgcomp // vg-var\n", vgv)
+		}
 
 		// NOTE: It's a bit too much to have "unused variable" errors coming from a Vugu code-generated file,
 		// too far off the beaten path of making "type-safe HTML templates with Go".  It makes sense with

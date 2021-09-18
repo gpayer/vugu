@@ -71,14 +71,13 @@ func RunRecursive(pkgPath string, opts *ParserGoPkgOpts) error {
 			hasVugu = true
 		}
 	}
-	if !hasVugu {
-		return errNoVuguFile
-	}
 
-	p := NewParserGoPkg(pkgPath, opts)
-	err = p.Run()
-	if err != nil {
-		return err
+	if hasVugu {
+		p := NewParserGoPkg(pkgPath, opts)
+		err = p.Run()
+		if err != nil {
+			return err
+		}
 	}
 
 	for _, subDir := range subDirList {
